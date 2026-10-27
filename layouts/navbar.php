@@ -17,7 +17,7 @@
         <li class="nav-item">
             <span class="nav-link">
                 <i class="fas fa-heartbeat text-danger mr-1"></i>
-                Donor Darah Kampus
+                DonDar POLANKA
             </span>
         </li>
     </ul>

@@ -1,13 +1,23 @@
 <?php
+
 // pages/pendonor_create.php
-// File tampilan saja. Dipanggil melalui layout AdminLTE dari index.php.
+
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/functions.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$errors = $_SESSION['pendonor_errors'] ?? [];
-$old = $_SESSION['pendonor_old'] ?? [
+// Deteksi mode tambah atau edit
+$idPendonor = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$isEdit = $idPendonor !== false && $idPendonor !== null && $idPendonor > 0;
+
+$pendonor = [
     'nama_lengkap' => '',
     'alamat' => '',
     'tanggal_lahir' => '',
@@ -15,9 +25,40 @@ $old = $_SESSION['pendonor_old'] ?? [
     'golongan_darah' => '',
     'no_hp' => '',
 ];
+
+if ($isEdit) {
+    $stmt = $pdo->prepare(
+        'SELECT id_pendonor, nama_lengkap, alamat, tanggal_lahir,
+                jenis_kelamin, golongan_darah, no_hp
+         FROM pendonor
+         WHERE id_pendonor = ?'
+    );
+    $stmt->execute([$idPendonor]);
+    $dataPendonor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$dataPendonor) {
+        http_response_code(404);
+        echo '<div class="alert alert-danger">Data pendonor tidak ditemukan.</div>';
+        return;
+    }
+
+    $pendonor = $dataPendonor;
+}
+
+// Data lama dari sesi, jika validasi penyimpanan sebelumnya gagal
+$errors = $_SESSION['pendonor_errors'] ?? [];
+$old = array_merge(
+    $pendonor,
+    $_SESSION['pendonor_old'] ?? []
+);
+
 $flashSuccess = $_SESSION['flash_success'] ?? '';
 
-unset($_SESSION['pendonor_errors'], $_SESSION['pendonor_old'], $_SESSION['flash_success']);
+unset(
+    $_SESSION['pendonor_errors'],
+    $_SESSION['pendonor_old'],
+    $_SESSION['flash_success']
+);
 
 $today = date('Y-m-d');
 $golonganDarah = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -61,16 +102,27 @@ $golonganDarah = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-id-card mr-2"></i>Formulir Identitas Pendonor
+                    <i class="fas fa-id-card mr-2"></i><?= $isEdit ? 'Edit Data Pendonor' : 'Formulir Identitas Pendonor' ?>
                 </h3>
             </div>
 
             <form id="formPendonor"
-                  method="post"
-                  action="index.php?page=pendonor-create"
-                  autocomplete="on"
-                  novalidate>
-                <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+      method="post"
+      action="<?= $isEdit
+          ? 'index.php?action=pendonor-update'
+          : 'index.php?page=pendonor-create' ?>"
+      autocomplete="on"
+      novalidate>
+
+    <input type="hidden"
+           name="csrf_token"
+           value="<?= e($_SESSION['csrf_token']) ?>">
+
+    <?php if ($isEdit): ?>
+        <input type="hidden"
+               name="id_pendonor"
+               value="<?= (int) $pendonor['id_pendonor'] ?>">
+    <?php endif; ?>
 
                 <div class="card-body">
                     <p class="text-muted">
@@ -172,11 +224,13 @@ $golonganDarah = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
                 <div class="card-footer d-flex justify-content-between flex-wrap">
                     <button type="reset" class="btn btn-default mb-2 mb-sm-0">
-                        <i class="fas fa-undo mr-1"></i> Reset Form
-                    </button>
+    <i class="fas fa-undo mr-1"></i>
+    <?= $isEdit ? 'Reset Perubahan' : 'Reset Form' ?>
+</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save mr-1"></i> Simpan Pendonor
-                    </button>
+    <i class="fas fa-save mr-1"></i>
+    <?= $isEdit ? 'Simpan Perubahan' : 'Simpan Pendonor' ?>
+</button>
                 </div>
             </form>
         </div>

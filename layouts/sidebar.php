@@ -58,7 +58,7 @@
                     </a>
                 </li>
 
-                <li class="nav-header">KEGIATAN DONOR</li>
+                <!-- <li class="nav-header">KEGIATAN DONOR</li>
 
                 <li class="nav-item">
                     <a href="index.php?page=kegiatan-index"
@@ -67,12 +67,12 @@
                         <i class="nav-icon fas fa-calendar-alt"></i>
                         <p>Data Kegiatan</p>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="nav-header">PEMERIKSAAN</li>
 
                 <li class="nav-item">
-                    <a href="index.php?page=pemeriksaan-create"
+                    <a href="index.php?page=pemeriksaan-index"
                        class="nav-link">
 
                         <i class="nav-icon fas fa-stethoscope"></i>

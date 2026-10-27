@@ -2,6 +2,17 @@
 
 require_once __DIR__ . '/includes/functions.php';
 
+
+if (($_GET['action'] ?? '') === 'pemeriksaan-update') {
+    require __DIR__ . '/actions/pemeriksaan_update.php';
+    exit;
+}
+
+if (($_GET['action'] ?? '') === 'pendonor-update') {
+    require __DIR__ . '/actions/pendonor_update.php';
+    exit;
+}
+
 /*
 |--------------------------------------------------------------------------
 | 1. ROUTE AJAX
@@ -39,6 +50,10 @@ $pages = [
     'pemeriksaan-create' => [
         'title' => 'Pemeriksaan Donor',
         'file' => 'pemeriksaan_create.php',
+    ],
+    'pemeriksaan-index' => [
+        'title' => 'Data Pemeriksaan Donor',
+        'file'  => 'pemeriksaan_index.php'
     ],
 ];
 
