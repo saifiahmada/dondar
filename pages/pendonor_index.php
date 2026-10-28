@@ -21,7 +21,7 @@ $kegiatanList = $pdo->query("SELECT id_kegiatan,nama_kegiatan,tanggal_kegiatan F
 <?php foreach ($pendonorList as $d): ?><tr>
 <td><?= (int)$d['id_pendonor'] ?></td><td><?= e($d['nama_lengkap']) ?></td><td><?= $d['jenis_kelamin']==='L'?'Laki-laki':'Perempuan' ?></td><td><?= e(donorAge($d['tanggal_lahir'])) ?></td><td><span class="badge badge-danger"><?= e($d['golongan_darah']) ?></span></td><td><div class="btn-group btn-group-sm">
 <button type="button" class="btn btn-info btn-pemeriksaan" data-modal="modalVital" data-id="<?= (int)$d['id_pendonor'] ?>" data-nama="<?= e($d['nama_lengkap']) ?>"><i class="fas fa-heartbeat"></i> Cek Darah</button>
-<button type="button" class="btn btn-warning btn-pemeriksaan" data-modal="modalGula" data-id="<?= (int)$d['id_pendonor'] ?>" data-nama="<?= e($d['nama_lengkap']) ?>"><i class="fas fa-tint"></i> Gula</button>
+<button type="button" class="btn btn-warning btn-pemeriksaan" data-modal="modalGula" data-id="<?= (int)$d['id_pendonor'] ?>" data-nama="<?= e($d['nama_lengkap']) ?>"><i class="fas fa-tint"></i> Hb</button>
 <button type="button" class="btn btn-success btn-pemeriksaan" data-modal="modalHasil" data-id="<?= (int)$d['id_pendonor'] ?>" data-nama="<?= e($d['nama_lengkap']) ?>"><i class="fas fa-check-circle"></i> Hasil</button>
 <a href="index.php?page=pendonor-create&id=<?= (int) $d['id_pendonor'] ?>"
    class="btn btn-primary"
@@ -42,8 +42,8 @@ function modalEnd($color) { echo '</div><div class="modal-footer"><button type="
 modalStart('modalVital','Input Tanda Vital & Antropometri','info',$_SESSION['csrf_token'],activitySelect($activityOptions));
 ?>
 <div class="form-row"><div class="form-group col-md-6"><label>Tekanan Sistolik (mmHg) *</label><input type="number" class="form-control" name="tekanan_sistolik" min="50" max="300" step="1" required></div><div class="form-group col-md-6"><label>Tekanan Diastolik (mmHg) *</label><input type="number" class="form-control" name="tekanan_diastolik" min="30" max="200" step="1" required></div><div class="form-group col-md-6"><label>Berat Badan (kg) *</label><input type="number" class="form-control" name="berat_badan" min="20" max="300" step="0.1" required></div><div class="form-group col-md-6"><label>Tinggi Badan (cm) *</label><input type="number" class="form-control" name="tinggi_badan" min="80" max="250" step="0.1" required></div></div><small class="text-muted">Rentang angka ini merupakan validasi input, bukan penentu kelayakan medis.</small>
-<?php modalEnd('info'); modalStart('modalGula','Input Gula Darah','warning',$_SESSION['csrf_token'],activitySelect($activityOptions)); ?>
-<div class="form-group"><label>Gula Darah (mg/dL) *</label><input type="number" class="form-control" name="gula_darah" min="20" max="800" step="0.1" required></div>
+<?php modalEnd('info'); modalStart('modalGula','Input Hb Darah','warning',$_SESSION['csrf_token'],activitySelect($activityOptions)); ?>
+<div class="form-group"><label>Hb Darah (g/dL) *</label><input type="number" class="form-control" name="gula_darah" min="12" max="17" step="0.1" required></div>
 <?php modalEnd('warning'); modalStart('modalHasil','Hasil Pemeriksaan Donor','success',$_SESSION['csrf_token'],activitySelect($activityOptions)); ?>
 <div class="form-group"><label>Layak Donor? *</label><select class="form-control" name="layak_donor" required><option value="">-- Pilih hasil --</option><option value="1">Layak donor</option><option value="0">Belum/tidak layak donor</option></select><small class="form-text text-muted">Keputusan akhir harus ditetapkan petugas/tenaga kesehatan berwenang.</small></div><div class="form-group"><label>Obat Diberikan</label><input type="text" class="form-control" name="obat_diberikan" maxlength="255"></div><div class="form-group"><label>Catatan Pemeriksaan</label><textarea class="form-control" name="catatan_pemeriksaan" rows="3" maxlength="5000"></textarea></div>
 <?php modalEnd('success'); ?>

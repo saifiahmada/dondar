@@ -89,7 +89,8 @@ $tekananSistolik = optionalNumber('tekanan_sistolik', 50, 300, true);
 $tekananDiastolik = optionalNumber('tekanan_diastolik', 30, 200, true);
 $beratBadan = optionalNumber('berat_badan', 20, 300);
 $tinggiBadan = optionalNumber('tinggi_badan', 80, 250);
-$gulaDarah = optionalNumber('gula_darah', 20, 800);
+// ini sebenarnya untuk HB bukan gula dara
+$gulaDarah = optionalNumber('gula_darah', 12, 17);
 
 /*
 |--------------------------------------------------------------------------

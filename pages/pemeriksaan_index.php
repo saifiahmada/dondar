@@ -197,7 +197,7 @@ function tampilTanggalPemeriksaan($value) {
                                 <th>Tekanan Darah</th>
                                 <th>Berat (kg)</th>
                                 <th>Tinggi (cm)</th>
-                                <th>Gula Darah (mg/dL)</th>
+                                <th>Hb Darah (g/dL)</th>
                                 <th>Hasil Kelayakan</th>
                                 <th>Obat Diberikan</th>
                                 <th>Aksi</th>
@@ -368,10 +368,10 @@ function tampilTanggalPemeriksaan($value) {
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Gula Darah (mg/dL)</label>
+                                <label>Hb Darah (g/dL)</label>
                                 <input type="number" class="form-control"
                                        name="gula_darah"
-                                       min="20" max="800" step="0.01">
+                                       min="12" max="17" step="0.01">
                             </div>
                         </div>
 
