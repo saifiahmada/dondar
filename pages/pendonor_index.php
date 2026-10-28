@@ -58,7 +58,44 @@ $(function(){
  {extend:'excelHtml5',text:'Excel',title:'Data_Pendonor',className:'btn btn-success btn-sm',exportOptions:{columns:[0,1,2,3,4]}},
  {extend:'pdfHtml5',text:'PDF',title:'Data Pendonor',orientation:'landscape',pageSize:'A4',className:'btn btn-danger btn-sm',exportOptions:{columns:[0,1,2,3,4]}},
  {extend:'print',text:'Cetak',className:'btn btn-primary btn-sm',exportOptions:{columns:[0,1,2,3,4]}}],columnDefs:[{targets:5,orderable:false,searchable:false}],language:{emptyTable:'Belum ada data pendonor',info:'Menampilkan _START_ sampai _END_ dari _TOTAL_ pendonor',infoEmpty:'Tidak ada data',lengthMenu:'Tampilkan _MENU_ data',search:'Cari:',zeroRecords:'Data tidak ditemukan',paginate:{first:'Awal',last:'Akhir',next:'Berikutnya',previous:'Sebelumnya'}}});
- $('.btn-pemeriksaan').on('click',function(){var $b=$(this),$m=$('#'+$b.data('modal'));$m.find('form')[0].reset();$m.find('[name=id_pendonor]').val($b.data('id'));$m.find('.nama-pendonor').text($b.data('nama'));$m.find('[name=csrf_token]').val(<?= json_encode($_SESSION['csrf_token']) ?>);$m.modal('show');});
+
+
+ // $('.btn-pemeriksaan').on('click',function(){var $b=$(this),$m=$('#'+$b.data('modal'));$m.find('form')[0].reset();$m.find('[name=id_pendonor]').val($b.data('id'));$m.find('.nama-pendonor').text($b.data('nama'));$m.find('[name=csrf_token]').val(<?= json_encode($_SESSION['csrf_token']) ?>);$m.modal('show');});
+
+
+// Event delegation agar tombol berfungsi di semua halaman DataTables
+$(document).on('click', '.btn-pemeriksaan', function (e) {
+    e.preventDefault();
+
+    var $b = $(this);
+    var modalId = $b.data('modal');
+    var $m = $('#' + modalId);
+    var form = $m.find('form')[0];
+
+    // Pastikan modal dan form ditemukan
+    if (!$m.length || !form) {
+        console.error('Modal atau form pemeriksaan tidak ditemukan:', modalId);
+        return;
+    }
+
+    // Reset form sebelum digunakan
+    form.reset();
+
+    // Isi identitas pendonor yang dipilih
+    $m.find('[name="id_pendonor"]').val($b.data('id'));
+    $m.find('.nama-pendonor').text($b.data('nama'));
+
+    // Isi token CSRF
+    $m.find('[name="csrf_token"]').val(
+        <?= json_encode($_SESSION['csrf_token']) ?>
+    );
+
+    // Tampilkan modal pemeriksaan
+    $m.modal('show');
+});
+
+
+
  $('.form-pemeriksaan').on('submit',function(ev){
     ev.preventDefault();
     var f=this;
